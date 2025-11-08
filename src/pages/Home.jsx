@@ -1,323 +1,277 @@
-import React, { useState } from 'react';
-import { Box, Container, Typography, ToggleButton, Modal, Backdrop, Fade, IconButton, useMediaQuery, Grid, Card, CardContent } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Typography, Container, Card, CardMedia, CardContent, Dialog, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import img1 from '../pics/1.jpeg';
-import img2 from '../pics/2.jpeg';
-import img3 from '../pics/3.jpeg';
-import img4 from '../pics/4.jpeg';
-import img5 from '../pics/5.jpeg';
-import img6 from '../pics/6.jpeg';
-import { motion } from 'framer-motion';
+import './References.css';
 
-const yearData = {
-  2020: [
-    {
-      featured: img1,
-      title: 'Black Lava Fields Visitor Center, Dimmuborgir, Iceland 2019',
-      description:
-        'The initial concept behind the project, steems from traditional Icelandic architecture.\nWe use materials such as timber and turf in order to associate the Icelandic vernacular architecture (turf houses).\nThe courtyard typology is an intriguing story of exchanging feelings that comes from sounds, smells and textures of the dark castles lava fields, lake Myvatn and Hverijall volcano.',
-      images: [img1, img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    }
-  ],
-  2021: [
-    {
-      featured: img4,
-      title: 'Mountain Lodge & Spa',
-      description: 'A secluded mountain lodge offering panoramic views and sustainable eco-luxury built with timber and stone materials.',
-      images: [img4, img5, img6]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'A multifunctional public space in repurposed industrial buildings focused on community and sustainability.',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Urban Regeneration Hub, Copenhagen 2020',
-      description:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrysLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrysLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys',
-      images: [img2, img3]
-    },
-    {
-      featured: img2,
-      title: 'Loren ispum ',
-      description:
-        '112 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrysLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys',
-      images: [img2, img3]
-    }
-  ]
-};
+const projectsData = [
+  {
+    year: '2021',
+    milestone: 'Expansion Year',
+    projects: [
+      {
+        title: 'Mountain Lodge & Spa',
+        image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+        description: 'Luxury mountain retreat with modern amenities',
+        gallery: [
+          'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80',
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80',
+          'https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=1920&q=80'
+        ]
+      }
+    ]
+  },
+  {
+    year: '2020',
+    milestone: 'Innovation Era',
+    projects: [
+      {
+        title: 'Urban Regeneration Hub, Copenhagen',
+        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+        description: 'Sustainable urban development project',
+        gallery: [
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80',
+          'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=80',
+          'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=80'
+        ]
+      },
+      {
+        title: 'Commercial District Development',
+        image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80',
+        description: 'Mixed-use commercial and residential space',
+        gallery: [
+          'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=80',
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80',
+          'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1920&q=80'
+        ]
+      }
+    ]
+  },
+  {
+    year: '2019',
+    milestone: 'Company Founded',
+    projects: [
+      {
+        title: 'First Commercial Building',
+        image: 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=800&q=80',
+        description: 'Our first major project',
+        gallery: [
+          'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=1920&q=80',
+          'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=80',
+          'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1920&q=80'
+        ]
+      }
+    ]
+  }
+];
 
 export const Home = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const [selectedYear, setSelectedYear] = useState('2020');
+  const timelineRefs = useRef([]);
+  const [openDialog, setOpenDialog] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [imageIndex, setImageIndex] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const handleOpen = (project) => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    timelineRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleOpenDialog = (project) => {
     setSelectedProject(project);
-    setImageIndex(0);
-    setOpen(true);
+    setCurrentImageIndex(0);
+    setOpenDialog(true);
   };
 
-  const handleClose = () => setOpen(false);
-
-  const handlePrev = () => {
-    setImageIndex((prev) => (prev > 0 ? prev - 1 : selectedProject.images.length - 1));
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedProject(null);
+    setCurrentImageIndex(0);
   };
 
-  const handleNext = () => {
-    setImageIndex((prev) => (prev < selectedProject.images.length - 1 ? prev + 1 : 0));
+  const handleNextImage = () => {
+    if (selectedProject) {
+      setCurrentImageIndex((prev) => (prev + 1) % selectedProject.gallery.length);
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (selectedProject) {
+      setCurrentImageIndex((prev) => (prev - 1 + selectedProject.gallery.length) % selectedProject.gallery.length);
+    }
   };
 
   return (
-    <Box sx={{ py: 6 }}>
-      <Container>
-        <Typography variant='h4' textAlign='center' fontWeight='bold' gutterBottom>
-          Projekte nach Jahren
+    <Box className='references-container'>
+      <Container maxWidth='xl'>
+        <Typography
+          variant='h2'
+          className='references-title'
+          sx={{
+            fontFamily: 'Poppins, Montserrat, sans-serif',
+            fontWeight: 600,
+            textAlign: 'center',
+            mb: 8,
+            mt: 4,
+            color: '#000',
+            fontSize: { xs: '2rem', md: '3rem' }
+          }}>
+          Architecture Projects
         </Typography>
 
-        <Box
-          sx={{
-            display: 'flex',
-            overflowX: 'auto',
-            gap: 1,
-            justifyContent: isMobile ? 'flex-start' : 'center',
-            py: 2,
-            px: 1,
-            '&::-webkit-scrollbar': { display: 'none' },
-            scrollbarWidth: 'none'
-          }}>
-          {Object.keys(yearData).map((year) => (
-            <ToggleButton
-              key={year}
-              value={year}
-              selected={selectedYear === year}
-              onClick={() => setSelectedYear(year)}
-              sx={{
-                minWidth: 90,
-                flex: '0 0 auto',
-                px: 2,
-                py: 1,
-                fontWeight: selectedYear === year ? 'bold' : 'normal',
-                backgroundColor: selectedYear === year ? 'primary.main' : '#f5f5f5',
-                color: selectedYear === year ? 'white' : 'text.primary',
-                borderRadius: 2,
-                '&:hover': {
-                  backgroundColor: selectedYear === year ? 'primary.dark' : '#e0e0e0'
-                }
-              }}>
-              {year}
-            </ToggleButton>
-          ))}
-        </Box>
+        <Box className='timeline'>
+          {projectsData.map((yearData, yearIndex) => (
+            <Box key={yearData.year} ref={(el) => (timelineRefs.current[yearIndex] = el)} className='timeline-section'>
+              {/* Year Marker */}
+              <Box className='year-marker'>
+                <Box className='year-line' />
+                <Typography variant='h1' className='year-number'>
+                  {yearData.year}
+                </Typography>
+                {yearData.milestone && (
+                  <Typography variant='subtitle1' className='year-milestone'>
+                    {yearData.milestone}
+                  </Typography>
+                )}
+              </Box>
 
-        <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
-          {yearData[selectedYear].map((project, idx) => (
-            <Box
-              key={idx}
-              onClick={() => handleOpen(project)}
-              sx={{
-                cursor: 'pointer',
-                borderRadius: 2,
-                overflow: 'hidden',
-                boxShadow: 3
-              }}>
-              <Box
-                component='img'
-                src={project.featured}
-                alt={project.title}
-                sx={{ width: '100%', height: 'auto', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.02)' } }}
-              />
-              <Box sx={{ p: 2 }}>
-                <Typography fontWeight='bold'>{project.title}</Typography>
+              {/* Projects Grid */}
+              <Box className='projects-grid'>
+                {yearData.projects.map((project, projectIndex) => (
+                  <Card
+                    key={projectIndex}
+                    className='project-card'
+                    onClick={() => handleOpenDialog(project)}
+                    sx={{
+                      animationDelay: `${projectIndex * 0.15}s`
+                    }}>
+                    <CardMedia component='img' height='300' image={project.image} alt={project.title} className='project-image' />
+                    <CardContent className='project-content'>
+                      <Typography variant='h6' className='project-title' sx={{ fontFamily: 'Poppins, Montserrat, sans-serif', fontWeight: 500 }}>
+                        {project.title}
+                      </Typography>
+                      <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
+                        {project.description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
               </Box>
             </Box>
           ))}
         </Box>
       </Container>
 
-      {selectedProject && (
-        <Modal open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
-          <Fade in={open}>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '95vw',
-                maxWidth: 1500,
-                maxHeight: '100vh',
-                bgcolor: 'background.paper',
-                boxShadow: 24,
-                p: 2,
-                borderRadius: 2,
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: { xs: 'column', md: 'row' },
-                gap: 3
-              }}>
-              <Box
+      {/* Image Gallery Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth='xl'
+        fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: '#fff',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            maxHeight: '95vh',
+            margin: 2
+          }
+        }}>
+        <IconButton
+          onClick={handleCloseDialog}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: '#000',
+            zIndex: 1,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 1)'
+            }
+          }}>
+          <CloseIcon />
+        </IconButton>
+
+        {selectedProject && (
+          <Box className='gallery-container'>
+            <Box className='gallery-main-image'>
+              <IconButton
+                onClick={handlePrevImage}
+                className='gallery-nav-button gallery-prev'
                 sx={{
-                  position: 'relative',
-                  width: '100%',
-                  maxHeight: { xs: '60vh', md: '80vh' },
-                  flex: 1,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  overflow: 'hidden',
-                  borderRadius: 2
+                  position: 'absolute',
+                  left: 16,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2
                 }}>
-                <IconButton
-                  onClick={handlePrev}
-                  sx={{
-                    position: 'absolute',
-                    left: 8,
-                    zIndex: 1,
-                    backgroundColor: 'rgba(255,255,255,0.7)',
-                    '&:hover': { backgroundColor: 'rgba(255,255,255,0.9)' }
-                  }}>
-                  <ChevronLeftIcon />
-                </IconButton>
+                ‹
+              </IconButton>
 
-                <Box
-                  component='img'
-                  src={selectedProject.images[imageIndex]}
-                  alt='Project image'
-                  sx={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
-                    borderRadius: 2
-                  }}
-                />
+              <img
+                src={selectedProject.gallery[currentImageIndex]}
+                alt={`${selectedProject.title} - ${currentImageIndex + 1}`}
+                className='gallery-image'
+              />
 
-                <IconButton
-                  onClick={handleNext}
-                  sx={{
-                    position: 'absolute',
-                    right: 8,
-                    zIndex: 1,
-                    backgroundColor: 'rgba(255,255,255,0.7)',
-                    '&:hover': { backgroundColor: 'rgba(255,255,255,0.9)' }
-                  }}>
-                  <ChevronRightIcon />
-                </IconButton>
-              </Box>
+              <IconButton
+                onClick={handleNextImage}
+                className='gallery-nav-button gallery-next'
+                sx={{
+                  position: 'absolute',
+                  right: 16,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2
+                }}>
+                ›
+              </IconButton>
+            </Box>
 
-              {/* Info section */}
-              <Box sx={{ flex: 1, mt: { xs: 2, md: 0 } }}>
-                <Typography variant='h6' fontWeight='bold' gutterBottom>
-                  {selectedProject.title}
-                </Typography>
-                <Typography variant='subtitle1' fontWeight='bold' gutterBottom>
-                  Description
-                </Typography>
-                <Typography variant='body2' sx={{ whiteSpace: 'pre-line' }}>
+            <Box className='gallery-info'>
+              <Typography variant='h5' sx={{ fontFamily: 'Poppins, Montserrat, sans-serif', textAlign: 'center', mb: 1 }}>
+                {selectedProject.title}
+              </Typography>
+
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                <Typography variant='body2' sx={{ textAlign: 'center' }}>
                   {selectedProject.description}
+                </Typography>
+                <Typography variant='body2' className='gallery-counter' sx={{ whiteSpace: 'nowrap' }}>
+                  {currentImageIndex + 1} / {selectedProject.gallery.length}
                 </Typography>
               </Box>
             </Box>
-          </Fade>
-        </Modal>
-      )}
 
-      <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5', py: 8 }}>
-        <Container maxWidth='lg'>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Typography variant='h2' component='h1' gutterBottom align='center' sx={{ mb: 4 }}>
-              Willkommen bei Plannic
-            </Typography>
-            <Typography variant='h5' align='center' color='text.secondary' sx={{ mb: 6 }}>
-              Ihre Experten für CAD-Services und Architektur
-            </Typography>
-
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={6}>
-                <Card sx={{ height: '100%' }}>
-                  <CardContent>
-                    <Typography variant='h5' component='h2' gutterBottom>
-                      CAD Services
-                    </Typography>
-                    <Typography variant='body1' color='text.secondary'>
-                      Professionelle CAD-Dienstleistungen für Ihre Projekte
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Card sx={{ height: '100%' }}>
-                  <CardContent>
-                    <Typography variant='h5' component='h2' gutterBottom>
-                      Architecture
-                    </Typography>
-                    <Typography variant='body1' color='text.secondary'>
-                      Innovative architektonische Lösungen
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-          </motion.div>
-        </Container>
-      </Box>
+            <Box className='gallery-thumbnails'>
+              {selectedProject.gallery.map((img, index) => (
+                <Box
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`gallery-thumbnail ${index === currentImageIndex ? 'active' : ''}`}
+                  sx={{
+                    backgroundImage: `url(${img})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+      </Dialog>
     </Box>
   );
 };

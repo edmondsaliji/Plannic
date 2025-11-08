@@ -12,7 +12,6 @@ function AppRoutes() {
       <Route path='/about-us' element={<AboutUs />} />
       <Route path='/contact' element={<Contact />} />
       <Route path='/references' element={<References />} />
-      {/* Routes for when user clicks on LandingPage sides */}
       <Route path='/cad-services' element={<Services />} />
       <Route path='/architecture' element={<Home />} />
     </Routes>
