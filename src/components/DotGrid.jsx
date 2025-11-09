@@ -169,12 +169,22 @@ const DotGrid = ({
   }, [buildGrid]);
 
   useEffect(() => {
+    const getPointerPosition = (e) => {
+      // Support both mouse and touch events
+      if (e.touches && e.touches.length > 0) {
+        return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
+      }
+      return { clientX: e.clientX, clientY: e.clientY };
+    };
+
     const onMove = (e) => {
+      const { clientX, clientY } = getPointerPosition(e);
+
       const now = performance.now();
       const pr = pointerRef.current;
       const dt = pr.lastTime ? now - pr.lastTime : 16;
-      const dx = e.clientX - pr.lastX;
-      const dy = e.clientY - pr.lastY;
+      const dx = clientX - pr.lastX;
+      const dy = clientY - pr.lastY;
       let vx = (dx / dt) * 1000;
       let vy = (dy / dt) * 1000;
       let speed = Math.hypot(vx, vy);
@@ -185,15 +195,15 @@ const DotGrid = ({
         speed = maxSpeed;
       }
       pr.lastTime = now;
-      pr.lastX = e.clientX;
-      pr.lastY = e.clientY;
+      pr.lastX = clientX;
+      pr.lastY = clientY;
       pr.vx = vx;
       pr.vy = vy;
       pr.speed = speed;
 
       const rect = canvasRef.current.getBoundingClientRect();
-      pr.x = e.clientX - rect.left;
-      pr.y = e.clientY - rect.top;
+      pr.x = clientX - rect.left;
+      pr.y = clientY - rect.top;
 
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - pr.x, dot.cy - pr.y);
@@ -219,9 +229,11 @@ const DotGrid = ({
     };
 
     const onClick = (e) => {
+      const { clientX, clientY } = getPointerPosition(e);
+
       const rect = canvasRef.current.getBoundingClientRect();
-      const cx = e.clientX - rect.left;
-      const cy = e.clientY - rect.top;
+      const cx = clientX - rect.left;
+      const cy = clientY - rect.top;
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - cx, dot.cy - cy);
         if (dist < shockRadius && !dot._inertiaApplied) {
@@ -247,12 +259,22 @@ const DotGrid = ({
     };
 
     const throttledMove = throttle(onMove, 50);
+
+    // Mouse events
     window.addEventListener('mousemove', throttledMove, { passive: true });
     window.addEventListener('click', onClick);
+
+    // Touch events for mobile
+    window.addEventListener('touchmove', throttledMove, { passive: true });
+    window.addEventListener('touchstart', onClick, { passive: true });
+    window.addEventListener('touchend', onClick, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', throttledMove);
       window.removeEventListener('click', onClick);
+      window.removeEventListener('touchmove', throttledMove);
+      window.removeEventListener('touchstart', onClick);
+      window.removeEventListener('touchend', onClick);
     };
   }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength]);
 
