@@ -49,7 +49,7 @@ const LandingPage = () => {
       {/* Centered Light Rays Effect for entire page */}
       <div className='global-light-rays'>
         <LightRays
-          raysOrigin='center'
+          raysOrigin='top-center'
           raysColor='#ffffff'
           raysSpeed={2.5}
           lightSpread={0.3}
