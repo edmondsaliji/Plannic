@@ -4,6 +4,7 @@ import './LandingPage.css';
 import DotGrid from './DotGrid';
 import TrueFocus from './TrueFocus';
 import LightRays from './LightRays';
+import TextType from './TextType';
 
 const LandingPage = () => {
   const [exitingSide, setExitingSide] = useState(null);
@@ -63,30 +64,42 @@ const LandingPage = () => {
         />
       </div>
 
-      {/* Loading overlay with drawing animation */}
       {isTransitioning && (
         <div className='loading-overlay'>
-          <div className='loading-content'>
-            <svg className='loading-svg' viewBox='0 0 800 200'>
-              <text x='50%' y='50%' textAnchor='middle' dominantBaseline='middle' className='loading-text'>
-                {exitingSide === 'cad' ? 'CAD Services' : 'Architecture'}
-              </text>
-            </svg>
-            <div className='drawing-line'></div>
-            <div className='blueprint-grid'>
-              <div className='grid-line horizontal line-1'></div>
-              <div className='grid-line horizontal line-2'></div>
-              <div className='grid-line vertical line-3'></div>
-              <div className='grid-line vertical line-4'></div>
+          {/* 3D Rotating blueprint grid */}
+          <div className='blueprint-3d-container'>
+            <div className='blueprint-grid-3d'>
+              {[...Array(10)].map((_, i) => (
+                <div key={`h-${i}`} className='grid-line-3d horizontal' style={{ '--index': i }} />
+              ))}
+              {[...Array(10)].map((_, i) => (
+                <div key={`v-${i}`} className='grid-line-3d vertical' style={{ '--index': i }} />
+              ))}
             </div>
           </div>
+
+          {/* Main content */}
+          <div className='loading-content'>
+            <TextType
+              text={[exitingSide === 'cad' ? 'CAD SERVICES' : 'ARCHITECTURE']}
+              typingSpeed={60}
+              pauseDuration={500}
+              deletingSpeed={30}
+              showCursor={true}
+              cursorCharacter='_'
+              loop={false}
+              className='loading-text-type'
+            />
+          </div>
+
+          {/* Scanline effect */}
+          <div className='scanline'></div>
         </div>
       )}
 
       <div
         className={`landing-side cad-side ${exitingSide === 'cad' ? 'active' : ''} ${exitingSide === 'architecture' ? 'exit-left' : ''}`}
         onClick={() => handleNavigation('/cad-services', 'cad')}>
-        <div className='overlay cad-overlay'></div>
         <div className='corner-lines'>
           <div className='corner-line top-left'></div>
           <div className='corner-line bottom-right'></div>
@@ -106,7 +119,6 @@ const LandingPage = () => {
       <div
         className={`landing-side architecture-side ${exitingSide === 'architecture' ? 'active' : ''} ${exitingSide === 'cad' ? 'exit-right' : ''}`}
         onClick={() => handleNavigation('/architecture', 'architecture')}>
-        <div className='overlay architecture-overlay'></div>
         <div className='corner-lines'>
           <div className='corner-line top-left'></div>
           <div className='corner-line bottom-right'></div>
