@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -20,22 +20,44 @@ import { Link, useLocation } from 'react-router-dom';
 
 import Logo from '../assets/plannic.svg';
 
+// const navItems = [
+//   { label: 'Startseite', path: '/' },
+//   { label: 'Leistungen', path: '/services' },
+//   { label: 'Über uns', path: '/about-us' },
+//   { label: 'Referenzen', path: '/references' },
+//   { label: 'Kontakt', path: '/contact' }
+// ];
+
 const navItems = [
-  { label: 'Startseite', path: '/' },
-  { label: 'Leistungen', path: '/services' },
-  { label: 'Über uns', path: '/about-us' },
-  { label: 'Referenzen', path: '/references' },
-  { label: 'Kontakt', path: '/contact' }
+  { label: 'Home', path: '/' },
+  { label: 'Services', path: '/services' },
+  { label: 'About us', path: '/about-us' },
+  { label: 'References', path: '/references' },
+  { label: 'Contact', path: '/contact' }
 ];
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrolled]);
 
   const drawer = (
     <Box sx={{ width: 250 }}>
@@ -75,22 +97,34 @@ function Header() {
   return (
     <>
       <AppBar
-        position='static'
+        position='fixed'
         color='transparent'
-        elevation={0}
+        elevation={scrolled ? 4 : 0}
         sx={{
-          borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-          backgroundColor: 'white'
+          borderBottom: scrolled ? 'none' : '1px solid rgba(0, 0, 0, 0.12)',
+          backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 1)',
+          backdropFilter: scrolled ? 'blur(10px)' : 'none',
+          transition: 'all 0.3s ease-in-out',
+          py: scrolled ? 0 : 0.5,
+          zIndex: 1100
         }}>
         <Toolbar
           sx={{
             justifyContent: 'space-between',
             px: { xs: 2, md: 4 },
-            py: 1
+            py: scrolled ? 0.5 : 1,
+            transition: 'all 0.3s ease-in-out'
           }}>
           <Link to='/' style={{ textDecoration: 'none' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <img src={Logo} alt='Logo' style={{ height: 42 }} />
+              <img
+                src={Logo}
+                alt='Logo'
+                style={{
+                  height: scrolled ? 36 : 42,
+                  transition: 'height 0.3s ease-in-out'
+                }}
+              />
             </Box>
           </Link>
 

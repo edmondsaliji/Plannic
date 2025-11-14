@@ -16,10 +16,21 @@ function AppContent() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh'
+        minHeight: '100vh',
+        width: '100%',
+        overflowX: 'hidden'
       }}>
       {!isLandingPage && <Header />}
-      <Box component='main' sx={{ flex: 1, px: isLandingPage ? 0 : 2, py: isLandingPage ? 0 : 4 }}>
+      <Box
+        component='main'
+        sx={{
+          flex: 1,
+          width: '100%',
+          px: 0,
+          py: 0,
+          pt: isLandingPage ? 0 : '64px',
+          overflowX: 'hidden'
+        }}>
         <AppRoutes />
       </Box>
       {!isLandingPage && <Footer />}

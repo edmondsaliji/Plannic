@@ -49,7 +49,7 @@ function Footer() {
         </Box>
 
         {/* Untere Sektion: Copyright */}
-        <Box sx={{ mt: 4, borderTop: '1px solid #e0e0e0', pt: 2, textAlign: 'center' }}>
+        <Box sx={{ mt: 4, borderTop: '1px solid #e0e0e0', textAlign: 'center' }}>
           <Typography variant='caption' color='textSecondary'>
             © {new Date().getFullYear()} Plannic GmbH – Alle Rechte vorbehalten.
           </Typography>
